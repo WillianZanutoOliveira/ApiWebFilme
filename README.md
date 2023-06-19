@@ -2,6 +2,9 @@
 
 Esta é uma API RESTful desenvolvida em C# .NET para obter informações sobre os indicados e vencedores da categoria Pior Filme do Golden Raspberry Awards.
 
+## Retorno da API
+- Obter o produtor com maior intervalo entre dois prêmios consecutivos, e o que obteve dois prêmios mais rápido.
+
 ## Requisitos
 
 - .NET 7.0 SDK instalado ([Download](https://dotnet.microsoft.com/pt-br/download/dotnet/7.0))
