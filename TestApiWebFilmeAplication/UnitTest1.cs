@@ -1,55 +1,42 @@
-using ApiWebFilme.Model;
-using ApiWebFilme.Repositories;
-using Moq;
-using Microsoft.AspNetCore.Mvc;
 using ApiWebFilme.Controllers;
-using Microsoft.Extensions.FileProviders;
+using ApiWebFilme.Model;
+using Microsoft.AspNetCore.Mvc.Testing;
+using System.Net;
+using System.Net.Http.Json;
+using System.Text.Json;
 
-namespace TestApiWebFilmeAplication
+namespace TestApiWebFilmeApplication
 {
-    public class Tests
+    [TestFixture]
+    public class FilmesControllerIntegrationTests
     {
-        /* [SetUp]
-         public void Setup()
-         {
-         }
+        private WebApplicationFactory<Program> _factory;
+        private HttpClient _client;
 
-         [Test]
-         public void Test1()
-         {
-             Assert.Pass();
-         }*/
-
-        [TestFixture]
-        public class FilmesControllerTests
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
-            [Test]
-            public async Task ObterPremios_DeveRetornarOk()
-            {
-
-                var filmeRepositoryMock = new Mock<IFilmesRepository>();
-                var meuController = new FilmesController(filmeRepositoryMock.Object);
-                var resultado = await meuController.ObterPremios();
-
-                Assert.That(resultado, Is.TypeOf<OkObjectResult>());
-            }
-
-            [Test]
-            public async Task LerArquivoCsv_DeveLerArquivoComSucesso()
-            {
-                var fileProvider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
-                var arquivoCsvPath = "Content/movielist.csv";
-                var fileInfo = fileProvider.GetFileInfo(arquivoCsvPath);
-
-
-                Assert.That(fileInfo.Exists, Is.True);
-
-                using (var streamReader = new StreamReader(fileInfo.PhysicalPath))
-                {
-                    var conteudo = streamReader.ReadToEnd();
-
-                }
-            }
+            _factory = new WebApplicationFactory<Program>();
+            _client = _factory.CreateClient();
         }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            _client.Dispose();
+            _factory.Dispose();
+        }
+
+        [Test]
+        public async Task ObterPremios_DeveRetornarStatusCode200()
+        {
+            // Arrange && Act
+            var response = await _client.GetAsync("/v1/api/filmes/premios");
+            response.EnsureSuccessStatusCode();
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        }
+
     }
 }

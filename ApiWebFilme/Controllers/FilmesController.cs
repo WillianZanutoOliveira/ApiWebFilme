@@ -3,7 +3,6 @@ using ApiWebFilme.Repositories;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.FileProviders;
 using System.Globalization;
 
 
@@ -14,10 +13,12 @@ namespace ApiWebFilme.Controllers
     public class FilmesController : ControllerBase
     {
         private readonly IFilmesRepository _filmeRepository;
+        private readonly IHostEnvironment _hostEnvironment;
 
-        public FilmesController(IFilmesRepository filmeRepository)
+        public FilmesController(IFilmesRepository filmeRepository, IHostEnvironment hostEnvironment)
         {
             _filmeRepository = filmeRepository;
+            _hostEnvironment = hostEnvironment;
         }
 
         [HttpGet("premios")]
@@ -25,20 +26,18 @@ namespace ApiWebFilme.Controllers
         {
             try
             {
-                string diretorioBase = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName;
-                string caminhoArquivo = Path.Combine(diretorioBase, "ApiWebFilme", "Content", "movielist.csv");
+                string solutionDirectory = Path.GetDirectoryName(_hostEnvironment.ContentRootPath);
+                string assetsPath = Path.Combine(solutionDirectory, "Assets");
+                string filePath = Path.Combine(assetsPath, "movielist.csv");
 
-                var fileProvider = new PhysicalFileProvider(diretorioBase);
-                var fileInfo = fileProvider.GetFileInfo("ApiWebFilme/ApiWebFilme/Content/movielist.csv");
-
-                if (fileInfo.Exists)
+                if (System.IO.File.Exists(filePath))
                 {
                     var config = new CsvConfiguration(CultureInfo.InvariantCulture)
                     {
                         Delimiter = ";",
                     };
 
-                    using (var reader = new StreamReader(fileInfo.CreateReadStream()))
+                    using (var reader = new StreamReader(filePath))
                     using (var csv = new CsvReader(reader, config))
                     {
                         csv.Read();
