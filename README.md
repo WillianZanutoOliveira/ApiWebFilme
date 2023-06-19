@@ -16,7 +16,7 @@ Esta é uma API RESTful desenvolvida em C# .NET para obter informações sobre o
    
 2. Abra o projeto no Visual Studio ou Visual Studio Code.
 
-3. Certifique-se de que o arquivo CSV "movies.csv" está presente na raiz do projeto da API, contendo os dados dos filmes.
+3. Certifique-se de que o arquivo CSV está na pasta Assets com o nome do arquivo "movies.csv" esteja presente na raiz do projeto da API, contendo os dados dos filmes.
 
 4. O banco de dados em memória será utilizado automaticamente pelo projeto, não sendo necessária nenhuma instalação externa.
 
@@ -36,7 +36,7 @@ dotnet run --project ApiWebFilme.csproj
 
 ## Executando o projeto
 
-- O projeto da API será executado e estará disponível na URL [http://localhost:5000](http://localhost:5000) ou [http://localhost:5001](http://localhost:5001) ou verifique no cmd qual é a porta que ele está rodando o projeto.
+- O projeto tem o swagger implementado da API será executado e estará disponível na URL [https://localhost:7017;http://localhost:5159] ou verifique no cmd qual é a porta que ele está rodando o projeto.
 
 ## Testes de Integração
 

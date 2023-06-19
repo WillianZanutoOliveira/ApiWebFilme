@@ -1,9 +1,7 @@
-using ApiWebFilme.Controllers;
 using ApiWebFilme.Model;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
 using System.Net.Http.Json;
-using System.Text.Json;
 
 namespace TestApiWebFilmeApplication
 {
@@ -30,12 +28,20 @@ namespace TestApiWebFilmeApplication
         [Test]
         public async Task ObterPremios_DeveRetornarStatusCode200()
         {
-            // Arrange && Act
+            // Arrange
             var response = await _client.GetAsync("/v1/api/filmes/premios");
             response.EnsureSuccessStatusCode();
 
+            // Act
+            var premiosResponse = await response.Content.ReadFromJsonAsync<FilmeData>();
+
             // Assert
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Assert.IsNotNull(premiosResponse);
+            Assert.IsNotNull(premiosResponse.Min);
+            Assert.AreEqual(2, premiosResponse.Min.Count);
+            Assert.IsNotNull(premiosResponse.Max);
+            Assert.AreEqual(2, premiosResponse.Max.Count);
         }
 
     }
