@@ -1,12 +1,9 @@
-﻿using ApiWebFilme.Model;
+﻿namespace ApiWebFilme.Repositories;
 
-namespace ApiWebFilme.Repositories
+public interface IFilmesRepository
 {
-    public interface IFilmesRepository
-    {
-        Task<IEnumerable<Filmes>> Get();
+    Task CreateAsync(List<Filme> filme);
 
-        Task Create(List<Filmes> filme);
+    Task DeleteAllAsync();
 
-    }
 }

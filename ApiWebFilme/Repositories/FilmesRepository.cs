@@ -1,32 +1,20 @@
-﻿using ApiWebFilme.Model;
-using Microsoft.EntityFrameworkCore;
+﻿namespace ApiWebFilme.Repositories;
 
-namespace ApiWebFilme.Repositories
+public class FilmesRepository : IFilmesRepository
 {
-    public class FilmesRepository : IFilmesRepository
+    public readonly FilmesContext _context;
+
+    public FilmesRepository(FilmesContext context)
+        => _context = context;
+
+    public async Task CreateAsync(List<Filme> filme)
     {
-        public readonly FilmesContext _context;
-
-        public FilmesRepository(FilmesContext context)
-        {
-            _context = context;
-        }
-
-        public async Task Create(List<Filmes> filme)
-        {
-            if (!_context.Filme.Any())
-            {
-                await _context.Filme.AddRangeAsync(filme);
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public async Task<IEnumerable<Filmes>> Get()
-        {
-            return await _context.Filme.ToListAsync();
-        }
-
+        await _context.Filmes.AddRangeAsync(filme);
+        await _context.SaveChangesAsync();
     }
 
+    public async Task DeleteAllAsync()
+    {
+        await _context.Filmes.ExecuteDeleteAsync();
+    }
 }
-

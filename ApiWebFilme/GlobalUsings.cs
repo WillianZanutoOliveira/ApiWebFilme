@@ -1,0 +1,12 @@
+﻿global using System.Text.RegularExpressions;
+global using Microsoft.EntityFrameworkCore;
+global using ApiWebFilme.Model;
+global using ApiWebFilme.Dto;
+global using ApiWebFilme.Repositories;
+global using CsvHelper;
+global using CsvHelper.Configuration;
+global using Microsoft.AspNetCore.Mvc;
+global using System.Globalization;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using System.Linq;
+global using ApiWebFilme.ViewModel;

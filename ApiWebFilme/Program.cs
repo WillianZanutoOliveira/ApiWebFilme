@@ -1,10 +1,5 @@
-using ApiWebFilme.Repositories;
-using Microsoft.EntityFrameworkCore;
-
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurações do banco de dados
 builder.Services.AddDbContext<FilmesContext>(options =>
 {
     options.UseSqlite("Data Source=filme.db");
@@ -12,6 +7,7 @@ builder.Services.AddDbContext<FilmesContext>(options =>
 
 builder.Services.AddMvc();
 builder.Services.AddScoped<IFilmesRepository, FilmesRepository>();
+builder.Services.AddScoped<IObterPremiosRepository, ObterPremiosRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
