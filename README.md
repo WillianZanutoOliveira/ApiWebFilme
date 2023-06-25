@@ -8,11 +8,13 @@ Esta é uma API RESTful desenvolvida em C# .NET para obter informações sobre o
 ## Requisitos
 
 - .NET 7.0 SDK instalado ([Download](https://dotnet.microsoft.com/pt-br/download/dotnet/7.0))
+- .NET CLI instalado ([Download](https://learn.microsoft.com/en-us/dotnet/machine-learning/how-to-guides/install-ml-net-cli?tabs=windows))
 - Visual Studio ou Visual Studio Code (opcional)
 
 ## Caso inicie um novo banco de dados rodar os comandos abaixo para rodar as Migrations:
 
 ```bash
+
 dotnet ef migrations add InitialCreate
  
 dotnet ef database update
