@@ -10,6 +10,14 @@ Esta é uma API RESTful desenvolvida em C# .NET para obter informações sobre o
 - .NET 7.0 SDK instalado ([Download](https://dotnet.microsoft.com/pt-br/download/dotnet/7.0))
 - Visual Studio ou Visual Studio Code (opcional)
 
+## Caso inicie um novo banco de dados rodar os comandos abaixo para rodar as Migrations:
+
+```bash
+dotnet ef migrations add InitialCreate
+ 
+dotnet ef database update
+```
+
 ## Configuração
 
 1. Clone o repositório para o seu ambiente local:
