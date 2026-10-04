@@ -1,5 +1,7 @@
 # Golden Raspberry Awards API
 
+[![CI](https://github.com/WillianZanutoOliveira/ApiWebFilme/actions/workflows/ci.yml/badge.svg)](https://github.com/WillianZanutoOliveira/ApiWebFilme/actions/workflows/ci.yml)
+
 REST API built with **C# and ASP.NET Core** to analyze Golden Raspberry Awards data and identify:
 
 - the producer with the **longest interval** between consecutive awards;
