@@ -43,6 +43,7 @@ This repository is one of my public .NET portfolio projects and demonstrates API
 - [Architecture](docs/architecture.md)
 - [ADR-0001 — Modernize to .NET 10](docs/adr/0001-modernize-to-dotnet-10.md)
 - [ADR-0002 — Calculate consecutive award intervals](docs/adr/0002-consecutive-award-intervals.md)
+- [ADR-0003 — Startup data seeding and read-only GET](docs/adr/0003-startup-data-seeding.md)
 
 ## Architecture overview
 
@@ -61,7 +62,7 @@ ASP.NET Core API
           +--> award/movie data
 ```
 
-The solution separates API concerns from data-access logic through repositories and uses automated tests to validate the expected API behavior.
+The solution separates API concerns from data-access logic through repositories and a dedicated business-rule calculator. Reference data is initialized once at application startup, so the public GET endpoint remains read-only.
 
 ## Running locally
 

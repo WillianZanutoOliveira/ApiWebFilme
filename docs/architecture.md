@@ -15,7 +15,8 @@ flowchart LR
     EF --> SQLite[(SQLite)]
 
     Awards --> Calc[AwardIntervalCalculator]
-    CSV[CSV dataset] --> Controller
+    CSV[CSV dataset] --> Seeder[DatabaseSeeder]
+    Seeder --> EF
 
     Health[/health] --> App[Application Health]
     CI[GitHub Actions] --> Tests[NUnit tests]
@@ -92,3 +93,16 @@ See:
 
 - [ADR-0001 — Modernize to .NET 10](adr/0001-modernize-to-dotnet-10.md)
 - [ADR-0002 — Consecutive award intervals](adr/0002-consecutive-award-intervals.md)
+
+
+## Startup data lifecycle
+
+The award dataset is reference data and is loaded by a dedicated `DatabaseSeeder` during application startup.
+
+The seeder only loads the CSV when the database does not already contain movie records.
+
+This keeps `GET /v1/api/filmes/premios` read-only and removes destructive persistence operations from the request path.
+
+Database creation is performed explicitly in the startup composition flow instead of inside the DbContext constructor.
+
+See [ADR-0003](adr/0003-startup-data-seeding.md).

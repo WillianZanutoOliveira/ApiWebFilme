@@ -1,3 +1,4 @@
+using ApiWebFilme.Data;
 using ApiWebFilme.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ builder.Services.AddDbContext<FilmesContext>(options =>
 builder.Services.AddSingleton<AwardIntervalCalculator>();
 builder.Services.AddScoped<IFilmesRepository, FilmesRepository>();
 builder.Services.AddScoped<IObterPremiosRepository, ObterPremiosRepository>();
+builder.Services.AddScoped<DatabaseSeeder>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -18,6 +20,15 @@ builder.Services.AddProblemDetails();
 builder.Services.AddHealthChecks();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<FilmesContext>();
+    await dbContext.Database.EnsureCreatedAsync();
+
+    var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+    await seeder.SeedAsync();
+}
 
 app.UseExceptionHandler();
 
