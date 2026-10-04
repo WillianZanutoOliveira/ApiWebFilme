@@ -28,7 +28,7 @@ This repository is one of my public .NET portfolio projects and demonstrates API
 - **Entity Framework Core**
 - **SQLite / in-memory database**
 - **Swagger**
-- **xUnit / integration testing**
+- **NUnit / integration testing**
 
 > This project was originally developed in 2023. It is preserved as a public portfolio project and may be modernized incrementally as part of my continuous architecture and engineering studies.
 
