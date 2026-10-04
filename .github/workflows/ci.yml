@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ master, modernize-dotnet-10 ]
+    branches: [ master ]
   pull_request:
     branches: [ master ]
   workflow_dispatch:
@@ -29,5 +29,20 @@ jobs:
       - name: Build
         run: dotnet build ApiWebFilme.sln --configuration Release --no-restore
 
-      - name: Test
-        run: dotnet test ApiWebFilme.sln --configuration Release --no-build --verbosity normal
+      - name: Test with coverage
+        run: >
+          dotnet test ApiWebFilme.sln
+          --configuration Release
+          --no-build
+          --verbosity normal
+          --collect:"XPlat Code Coverage"
+          --results-directory TestResults
+
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage
+          path: TestResults/**
+          if-no-files-found: warn
+          retention-days: 14
