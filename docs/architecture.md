@@ -1,12 +1,14 @@
-# Architecture
+[🇺🇸 English](architecture.en.md)
 
-## Overview
+# Arquitetura
 
-The Golden Raspberry Awards API is intentionally compact, but the project separates HTTP orchestration, persistence and a testable business rule for award intervals.
+## Visão geral
+
+A Golden Raspberry Awards API é intencionalmente compacta, mas o projeto separa a orquestração HTTP, a persistência e uma regra de negócio testável para os intervalos entre premiações.
 
 ```mermaid
 flowchart LR
-    Client[HTTP Client] --> Controller[FilmesController]
+    Client[Cliente HTTP] --> Controller[FilmesController]
     Controller --> Movies[IFilmesRepository]
     Controller --> Awards[IObterPremiosRepository]
 
@@ -15,94 +17,93 @@ flowchart LR
     EF --> SQLite[(SQLite)]
 
     Awards --> Calc[AwardIntervalCalculator]
-    CSV[CSV dataset] --> Seeder[DatabaseSeeder]
+    CSV[Dataset CSV] --> Seeder[DatabaseSeeder]
     Seeder --> EF
 
-    Health[/health] --> App[Application Health]
-    CI[GitHub Actions] --> Tests[NUnit tests]
-    CI --> Docker[Docker build]
+    Health[/health] --> App[Saúde da aplicação]
+    CI[GitHub Actions] --> Tests[Testes NUnit]
+    CI --> Docker[Build Docker]
 ```
 
-## API layer
+## Camada de API
 
-`FilmesController` exposes the award endpoint and coordinates dataset initialization and query execution.
+O `FilmesController` expõe o endpoint de premiações e coordena a consulta dos dados.
 
-ASP.NET Core Problem Details support is enabled for consistent error responses and a lightweight `/health` endpoint supports operational liveness checks.
+O suporte a Problem Details do ASP.NET Core fornece respostas de erro consistentes, enquanto um endpoint leve `/health` atende verificações operacionais de liveness.
 
-## Persistence
+## Persistência
 
-Entity Framework Core with SQLite keeps the project self-contained for local execution and CI.
+Entity Framework Core com SQLite mantém o projeto autocontido para execução local e CI.
 
-Repository abstractions isolate data-access behavior from the HTTP surface.
+Abstrações de repositório isolam o comportamento de acesso a dados da superfície HTTP.
 
-## Award interval rule
+## Regra de intervalo entre premiações
 
-The original implementation compared the earliest and latest win for each producer.
+A implementação original comparava a primeira e a última vitória de cada produtor.
 
-That approach can be incorrect when a producer has three or more wins because the specification concerns intervals between **consecutive awards**.
+Essa abordagem pode ser incorreta quando um produtor possui três ou mais vitórias, pois a especificação trata dos intervalos entre **premiações consecutivas**.
 
-The current design queries winning producer/year entries and delegates the rule to `AwardIntervalCalculator`.
+O design atual consulta as entradas produtor/ano vencedoras e delega a regra ao `AwardIntervalCalculator`.
 
-For each producer the calculator:
+Para cada produtor, o calculator:
 
-1. removes duplicate winning years;
-2. orders winning years chronologically;
-3. creates adjacent year pairs;
-4. calculates the interval for each consecutive pair;
-5. returns all global minimum and maximum intervals.
+1. remove anos de vitória duplicados;
+2. ordena os anos cronologicamente;
+3. cria pares adjacentes;
+4. calcula o intervalo de cada par consecutivo;
+5. retorna todos os menores e maiores intervalos globais.
 
-If no producer has at least two winning years, the calculator returns empty collections rather than throwing an exception.
+Se nenhum produtor possuir pelo menos dois anos de vitória, o calculator retorna coleções vazias em vez de lançar uma exceção.
 
-This rule is covered by dedicated NUnit tests.
+A regra é coberta por testes NUnit dedicados.
 
-## Testing strategy
+## Estratégia de testes
 
-The test suite includes:
+A suíte inclui:
 
-- end-to-end HTTP behavior through `WebApplicationFactory<Program>`;
-- pure business-rule tests for the interval calculator;
-- edge-case coverage for producers with fewer than two wins;
-- duplicate-year handling.
+- comportamento HTTP end-to-end usando `WebApplicationFactory<Program>`;
+- testes puros da regra de negócio do calculator;
+- cobertura de edge cases para produtores com menos de duas vitórias;
+- tratamento de anos duplicados.
 
-## CI and delivery
+## CI e entrega
 
-GitHub Actions performs:
+O GitHub Actions executa:
 
-1. dependency restore;
-2. Release build;
-3. unit and integration tests;
-4. XPlat code-coverage collection;
-5. coverage artifact upload;
-6. Docker image build.
+1. restore de dependências;
+2. build em Release;
+3. testes unitários e de integração;
+4. coleta de cobertura XPlat;
+5. upload do artefato de cobertura;
+6. build da imagem Docker.
 
-Dependabot is configured for NuGet dependencies and GitHub Actions.
+O Dependabot está configurado para dependências NuGet e GitHub Actions.
 
 ## Container
 
-The project uses a multi-stage .NET 10 Dockerfile.
+O projeto utiliza um Dockerfile multi-stage em .NET 10.
 
-The final image contains only the ASP.NET Core runtime, published application and the portfolio dataset required by the API.
+A imagem final contém apenas o runtime do ASP.NET Core, a aplicação publicada e o dataset de portfólio necessário para a API.
 
-## Modernization
+## Modernização
 
-The project was originally developed on .NET 7 and later modernized to .NET 10.
+O projeto foi desenvolvido originalmente em .NET 7 e posteriormente modernizado para .NET 10.
 
-Further hardening separated the core business calculation, expanded tests and added container validation.
+O hardening adicional separou o cálculo central de negócio, ampliou os testes e adicionou validação do container.
 
-See:
+Consulte:
 
-- [ADR-0001 — Modernize to .NET 10](adr/0001-modernize-to-dotnet-10.md)
-- [ADR-0002 — Consecutive award intervals](adr/0002-consecutive-award-intervals.md)
+- [ADR-0001 — Modernização para .NET 10](adr/0001-modernize-to-dotnet-10.md)
+- [ADR-0002 — Intervalos consecutivos entre premiações](adr/0002-consecutive-award-intervals.md)
 
+## Ciclo de vida dos dados no startup
 
-## Startup data lifecycle
+O dataset de premiações é tratado como dado de referência e carregado por um `DatabaseSeeder` dedicado durante o startup da aplicação.
 
-The award dataset is reference data and is loaded by a dedicated `DatabaseSeeder` during application startup.
+O seeder carrega o CSV apenas quando o banco ainda não contém registros de filmes.
 
-The seeder only loads the CSV when the database does not already contain movie records.
+Isso mantém `GET /v1/api/filmes/premios` somente leitura e remove operações destrutivas de persistência do caminho da requisição.
 
-This keeps `GET /v1/api/filmes/premios` read-only and removes destructive persistence operations from the request path.
+A criação do banco é executada explicitamente no fluxo de composição do startup, em vez de ocorrer dentro do construtor do DbContext.
 
-Database creation is performed explicitly in the startup composition flow instead of inside the DbContext constructor.
-
-See [ADR-0003](adr/0003-startup-data-seeding.md).
+Consulte [ADR-0003](adr/0003-startup-data-seeding.md).
