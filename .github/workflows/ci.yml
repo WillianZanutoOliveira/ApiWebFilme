@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, modernize-dotnet-10 ]
   pull_request:
     branches: [ master ]
   workflow_dispatch:
@@ -21,7 +21,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '7.0.x'
+          dotnet-version: '10.0.x'
 
       - name: Restore
         run: dotnet restore ApiWebFilme.sln
