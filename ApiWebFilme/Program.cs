@@ -5,7 +5,6 @@ builder.Services.AddDbContext<FilmesContext>(options =>
     options.UseSqlite("Data Source=filme.db");
 });
 
-builder.Services.AddMvc();
 builder.Services.AddScoped<IFilmesRepository, FilmesRepository>();
 builder.Services.AddScoped<IObterPremiosRepository, ObterPremiosRepository>();
 
@@ -26,4 +25,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
 public partial class Program { }
