@@ -18,6 +18,10 @@ This repository is one of my public .NET portfolio projects and demonstrates API
 - CSV data ingestion
 - Swagger / OpenAPI
 - integration tests
+- unit-tested business rules for consecutive award intervals
+- Problem Details and health checks
+- Docker image validation in CI
+- dependency update automation with Dependabot
 - relational/data modeling concepts
 
 ## Tech stack
@@ -28,7 +32,9 @@ This repository is one of my public .NET portfolio projects and demonstrates API
 - **Entity Framework Core**
 - **SQLite / in-memory database**
 - **Swagger**
-- **NUnit / integration testing**
+- **NUnit / unit + integration testing**
+- **Docker**
+- **GitHub Actions**
 
 > This project was originally developed in 2023. It is preserved as a public portfolio project and may be modernized incrementally as part of my continuous architecture and engineering studies.
 
@@ -36,6 +42,7 @@ This repository is one of my public .NET portfolio projects and demonstrates API
 
 - [Architecture](docs/architecture.md)
 - [ADR-0001 — Modernize to .NET 10](docs/adr/0001-modernize-to-dotnet-10.md)
+- [ADR-0002 — Calculate consecutive award intervals](docs/adr/0002-consecutive-award-intervals.md)
 
 ## Architecture overview
 
@@ -78,6 +85,28 @@ dotnet run --project ApiWebFilme/ApiWebFilme.csproj
 
 When running in development, use Swagger/OpenAPI to explore the available endpoints.
 
+## Docker
+
+Build the production-style image:
+
+```bash
+docker build -t golden-raspberry-api .
+```
+
+Run the container:
+
+```bash
+docker run --rm -p 8080:8080 golden-raspberry-api
+```
+
+The CI pipeline also builds the container image, ensuring the Dockerfile stays executable.
+
+Health endpoint:
+
+```text
+GET /health
+```
+
 ## Tests
 
 Run the automated tests with:
@@ -86,7 +115,7 @@ Run the automated tests with:
 dotnet test
 ```
 
-The test project validates the API behavior against the expected Golden Raspberry Awards rules.
+The test project validates the HTTP API and the award-interval business rule. The calculator explicitly evaluates **consecutive wins** for each producer rather than only comparing the first and last win.
 
 ## Engineering notes
 

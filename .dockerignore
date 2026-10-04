@@ -1,0 +1,10 @@
+**/bin/
+**/obj/
+**/.vs/
+**/.idea/
+.git/
+.github/
+TestResults/
+*.db-shm
+*.db-wal
+*.db-journal

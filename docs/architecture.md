@@ -2,71 +2,93 @@
 
 ## Overview
 
-The Golden Raspberry Awards API is intentionally small, but it follows a structure that separates HTTP concerns, business/data access and persistence.
+The Golden Raspberry Awards API is intentionally compact, but the project separates HTTP orchestration, persistence and a testable business rule for award intervals.
 
 ```mermaid
 flowchart LR
     Client[HTTP Client] --> Controller[FilmesController]
-    Controller --> Awards[IObterPremiosRepository]
     Controller --> Movies[IFilmesRepository]
+    Controller --> Awards[IObterPremiosRepository]
+
     Awards --> EF[Entity Framework Core]
     Movies --> EF
     EF --> SQLite[(SQLite)]
+
+    Awards --> Calc[AwardIntervalCalculator]
     CSV[CSV dataset] --> Controller
+
+    Health[/health] --> App[Application Health]
+    CI[GitHub Actions] --> Tests[NUnit tests]
+    CI --> Docker[Docker build]
 ```
 
-## Responsibilities
+## API layer
 
-### API layer
+`FilmesController` exposes the award endpoint and coordinates dataset initialization and query execution.
 
-The controller exposes the HTTP contract and coordinates the application flow.
+ASP.NET Core Problem Details support is enabled for consistent error responses and a lightweight `/health` endpoint supports operational liveness checks.
 
-Responsibilities include:
+## Persistence
 
-- receiving HTTP requests;
-- coordinating data loading and analysis;
-- returning the award interval result;
-- translating application behavior into HTTP responses.
+Entity Framework Core with SQLite keeps the project self-contained for local execution and CI.
 
-### Repository layer
+Repository abstractions isolate data-access behavior from the HTTP surface.
 
-Repository abstractions isolate persistence/data-access concerns from the API surface.
+## Award interval rule
 
-This keeps the controller from depending directly on EF Core implementation details.
+The original implementation compared the earliest and latest win for each producer.
 
-### Persistence
+That approach can be incorrect when a producer has three or more wins because the specification concerns intervals between **consecutive awards**.
 
-Entity Framework Core with SQLite is used for local persistence.
+The current design queries winning producer/year entries and delegates the rule to `AwardIntervalCalculator`.
 
-SQLite keeps the portfolio project simple to execute without requiring external infrastructure.
+For each producer the calculator:
 
-### Data ingestion
+1. removes duplicate winning years;
+2. orders winning years chronologically;
+3. creates adjacent year pairs;
+4. calculates the interval for each consecutive pair;
+5. returns all global minimum and maximum intervals.
 
-The source dataset is read from CSV and transformed into application data before the award interval calculation is returned.
+If no producer has at least two winning years, the calculator returns empty collections rather than throwing an exception.
+
+This rule is covered by dedicated NUnit tests.
 
 ## Testing strategy
 
-The project includes integration tests using `WebApplicationFactory<Program>`.
+The test suite includes:
 
-The test exercises the application through its HTTP endpoint instead of calling the controller directly, validating:
+- end-to-end HTTP behavior through `WebApplicationFactory<Program>`;
+- pure business-rule tests for the interval calculator;
+- edge-case coverage for producers with fewer than two wins;
+- duplicate-year handling.
 
-- application startup;
-- dependency registration;
-- endpoint routing;
-- HTTP response;
-- serialization;
-- business result.
+## CI and delivery
 
-## CI
+GitHub Actions performs:
 
-GitHub Actions restores, builds and tests the solution for every change targeting the main branch.
+1. dependency restore;
+2. Release build;
+3. unit and integration tests;
+4. XPlat code-coverage collection;
+5. coverage artifact upload;
+6. Docker image build.
 
-The pipeline also collects cross-platform code-coverage output as a build artifact.
+Dependabot is configured for NuGet dependencies and GitHub Actions.
+
+## Container
+
+The project uses a multi-stage .NET 10 Dockerfile.
+
+The final image contains only the ASP.NET Core runtime, published application and the portfolio dataset required by the API.
 
 ## Modernization
 
-The project was originally created on .NET 7 and was modernized to **.NET 10** in 2026.
+The project was originally developed on .NET 7 and later modernized to .NET 10.
 
-The modernization was performed through a dedicated pull request and validated by CI before merge.
+Further hardening separated the core business calculation, expanded tests and added container validation.
 
-See [ADR-0001](./adr/0001-modernize-to-dotnet-10.md).
+See:
+
+- [ADR-0001 — Modernize to .NET 10](adr/0001-modernize-to-dotnet-10.md)
+- [ADR-0002 — Consecutive award intervals](adr/0002-consecutive-award-intervals.md)
