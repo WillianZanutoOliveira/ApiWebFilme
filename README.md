@@ -1,5 +1,7 @@
 <div align="center">
 
+[🇺🇸 English](README.en.md)
+
 # Golden Raspberry Awards API
 
 ### .NET 10 · ASP.NET Core · EF Core · NUnit · Docker · CI/CD
@@ -13,57 +15,57 @@
 
 </div>
 
-Modernized portfolio API built with **C# and ASP.NET Core** to analyze Golden Raspberry Awards data, with isolated business rules, automated tests, Docker and documented architectural decisions.
+API de portfólio modernizada, construída com **C# e ASP.NET Core** para analisar dados do Golden Raspberry Awards, com regras de negócio isoladas, testes automatizados, Docker e decisões arquiteturais documentadas.
 
-**Quick links:** [Architecture](docs/architecture.md) · [ADRs](docs/adr) · [CI](https://github.com/WillianZanutoOliveira/ApiWebFilme/actions/workflows/ci.yml)
+**Links rápidos:** [Arquitetura](docs/architecture.md) · [ADRs](docs/adr) · [CI](https://github.com/WillianZanutoOliveira/ApiWebFilme/actions/workflows/ci.yml)
 
-The API identifies:
+A API identifica:
 
-- the producer with the **longest interval** between consecutive awards;
-- the producer who received **two awards in the shortest interval**.
+- o produtor com o **maior intervalo** entre premiações consecutivas;
+- o produtor que recebeu **dois prêmios no menor intervalo**.
 
-This repository is one of my public .NET portfolio projects and demonstrates API design, data processing, persistence, integration testing and CI/CD. The project was modernized from .NET 7 to **.NET 10** through a CI-validated pull request.
+Este repositório é um dos meus projetos públicos de portfólio .NET e demonstra design de APIs, processamento de dados, persistência, testes de integração e CI/CD. O projeto foi modernizado de .NET 7 para **.NET 10** por meio de um Pull Request validado pelo CI.
 
-## What this project demonstrates
+## O que este projeto demonstra
 
 - ASP.NET Core Web API
-- REST endpoints
+- endpoints REST
 - Entity Framework Core
-- repository abstraction
-- CSV data ingestion
+- abstração de repositórios
+- ingestão de dados CSV
 - Swagger / OpenAPI
-- integration tests
-- unit-tested business rules for consecutive award intervals
-- Problem Details and health checks
-- Docker image validation in CI
-- dependency update automation with Dependabot
-- relational/data modeling concepts
+- testes de integração
+- regras de negócio de intervalos consecutivos cobertas por testes unitários
+- Problem Details e health checks
+- validação da imagem Docker no CI
+- atualização de dependências com Dependabot
+- conceitos de modelagem relacional e de dados
 
-## Tech stack
+## Stack técnica
 
 - **C#**
 - **.NET 10**
 - **ASP.NET Core**
 - **Entity Framework Core**
-- **SQLite / in-memory database**
+- **SQLite / banco em memória**
 - **Swagger**
-- **NUnit / unit + integration testing**
+- **NUnit / testes unitários + integração**
 - **Docker**
 - **GitHub Actions**
 
-> This project was originally developed in 2023. It is preserved as a public portfolio project and may be modernized incrementally as part of my continuous architecture and engineering studies.
+> Este projeto foi desenvolvido originalmente em 2023. Ele é mantido como projeto público de portfólio e pode ser modernizado de forma incremental como parte do meu estudo contínuo de arquitetura e engenharia.
 
-## Engineering documentation
+## Documentação de engenharia
 
-- [Architecture](docs/architecture.md)
-- [ADR-0001 — Modernize to .NET 10](docs/adr/0001-modernize-to-dotnet-10.md)
-- [ADR-0002 — Calculate consecutive award intervals](docs/adr/0002-consecutive-award-intervals.md)
-- [ADR-0003 — Startup data seeding and read-only GET](docs/adr/0003-startup-data-seeding.md)
+- [Arquitetura](docs/architecture.md)
+- [ADR-0001 — Modernização para .NET 10](docs/adr/0001-modernize-to-dotnet-10.md)
+- [ADR-0002 — Cálculo de intervalos consecutivos entre premiações](docs/adr/0002-consecutive-award-intervals.md)
+- [ADR-0003 — Seed no startup e GET somente leitura](docs/adr/0003-startup-data-seeding.md)
 
-## Architecture overview
+## Visão geral da arquitetura
 
 ```text
-Client
+Cliente
   |
   v
 ASP.NET Core API
@@ -74,68 +76,68 @@ ASP.NET Core API
   |
   +--> EF Core
           |
-          +--> award/movie data
+          +--> dados de filmes/premiações
 ```
 
-The solution separates API concerns from data-access logic through repositories and a dedicated business-rule calculator. Reference data is initialized once at application startup, so the public GET endpoint remains read-only.
+A solução separa as responsabilidades da API da lógica de acesso a dados por meio de repositórios e de um componente dedicado ao cálculo da regra de negócio. Os dados de referência são inicializados uma única vez no startup da aplicação, mantendo o endpoint GET público sem efeitos colaterais.
 
-## Running locally
+## Executando localmente
 
-### Requirements
+### Requisitos
 
 - .NET 10 SDK
 
-Clone the repository:
+Clone o repositório:
 
 ```bash
 git clone https://github.com/WillianZanutoOliveira/ApiWebFilme.git
 cd ApiWebFilme
 ```
 
-Restore and run:
+Restaure as dependências e execute:
 
 ```bash
 dotnet restore
 dotnet run --project ApiWebFilme/ApiWebFilme.csproj
 ```
 
-When running in development, use Swagger/OpenAPI to explore the available endpoints.
+Em ambiente de desenvolvimento, utilize o Swagger/OpenAPI para explorar os endpoints disponíveis.
 
 ## Docker
 
-Build the production-style image:
+Construa a imagem:
 
 ```bash
 docker build -t golden-raspberry-api .
 ```
 
-Run the container:
+Execute o container:
 
 ```bash
 docker run --rm -p 8080:8080 golden-raspberry-api
 ```
 
-The CI pipeline also builds the container image, ensuring the Dockerfile stays executable.
+O pipeline de CI também constrói a imagem do container, garantindo que o Dockerfile permaneça executável.
 
-Health endpoint:
+Endpoint de saúde:
 
 ```text
 GET /health
 ```
 
-## Tests
+## Testes
 
-Run the automated tests with:
+Execute os testes automatizados com:
 
 ```bash
 dotnet test
 ```
 
-The test project validates the HTTP API and the award-interval business rule. The calculator explicitly evaluates **consecutive wins** for each producer rather than only comparing the first and last win.
+O projeto de testes valida a API HTTP e a regra de negócio dos intervalos entre premiações. O calculador avalia explicitamente **vitórias consecutivas** de cada produtor, em vez de comparar apenas a primeira e a última vitória.
 
-## Engineering notes
+## Notas de engenharia
 
-This repository reflects an earlier stage of my .NET work. My current professional focus includes **modern .NET, APIs, integrations, messaging, CI/CD, observability, cloud and software architecture**.
+Este repositório representa uma etapa anterior da minha trajetória com .NET. Meu foco profissional atual inclui **.NET moderno, APIs, integrações, mensageria, CI/CD, observabilidade, cloud e arquitetura de software**.
 
-For current architecture case studies and professional positioning, visit my profile:
+Para cases atuais de arquitetura e meu posicionamento profissional, acesse meu perfil:
 - https://github.com/WillianZanutoOliveira
