@@ -1,8 +1,23 @@
+<div align="center">
+
 # Golden Raspberry Awards API
 
-[![CI](https://github.com/WillianZanutoOliveira/ApiWebFilme/actions/workflows/ci.yml/badge.svg)](https://github.com/WillianZanutoOliveira/ApiWebFilme/actions/workflows/ci.yml)
+### .NET 10 · ASP.NET Core · EF Core · NUnit · Docker · CI/CD
 
-REST API built with **C# and ASP.NET Core** to analyze Golden Raspberry Awards data and identify:
+[![CI](https://github.com/WillianZanutoOliveira/ApiWebFilme/actions/workflows/ci.yml/badge.svg)](https://github.com/WillianZanutoOliveira/ApiWebFilme/actions/workflows/ci.yml)
+![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)
+![EF Core](https://img.shields.io/badge/EF%20Core-SQLite-512BD4)
+![Tests](https://img.shields.io/badge/Tests-Unit%20%2B%20Integration-22C55E)
+![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
+![ADRs](https://img.shields.io/badge/Architecture-ADRs-7C3AED)
+
+</div>
+
+Modernized portfolio API built with **C# and ASP.NET Core** to analyze Golden Raspberry Awards data, with isolated business rules, automated tests, Docker and documented architectural decisions.
+
+**Quick links:** [Architecture](docs/architecture.md) · [ADRs](docs/adr) · [CI](https://github.com/WillianZanutoOliveira/ApiWebFilme/actions/workflows/ci.yml)
+
+The API identifies:
 
 - the producer with the **longest interval** between consecutive awards;
 - the producer who received **two awards in the shortest interval**.
