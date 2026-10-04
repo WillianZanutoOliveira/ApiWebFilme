@@ -1,9 +1,6 @@
-﻿namespace ApiWebFilme.Repositories;
+namespace ApiWebFilme.Repositories;
 
 public interface IFilmesRepository
 {
-    Task CreateAsync(List<Filme> filme);
-
-    Task DeleteAllAsync();
-
+    Task CreateAsync(List<Filme> filmes);
 }
