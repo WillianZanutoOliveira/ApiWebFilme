@@ -1,70 +1,89 @@
-# API RESTful do Golden Raspberry Awards
+# Golden Raspberry Awards API
 
-Esta é uma API RESTful desenvolvida em C# .NET para obter informações sobre os indicados e vencedores da categoria Pior Filme do Golden Raspberry Awards.
+REST API built with **C# and ASP.NET Core** to analyze Golden Raspberry Awards data and identify:
 
-## Retorno da API
-- Obter o produtor com maior intervalo entre dois prêmios consecutivos, e o que obteve dois prêmios mais rápido.
+- the producer with the **longest interval** between consecutive awards;
+- the producer who received **two awards in the shortest interval**.
 
-## Requisitos
+This repository is one of my public .NET portfolio projects and demonstrates API design, data processing, persistence and integration testing.
 
-- .NET 7.0 SDK instalado ([Download](https://dotnet.microsoft.com/pt-br/download/dotnet/7.0))
-- .NET CLI instalado ([Download](https://learn.microsoft.com/en-us/dotnet/machine-learning/how-to-guides/install-ml-net-cli?tabs=windows))
-- Visual Studio ou Visual Studio Code (opcional)
+## What this project demonstrates
 
-## Caso inicie um novo banco de dados rodar os comandos abaixo para rodar as Migrations:
+- ASP.NET Core Web API
+- REST endpoints
+- Entity Framework Core
+- repository abstraction
+- CSV data ingestion
+- Swagger / OpenAPI
+- integration tests
+- relational/data modeling concepts
 
-```bash
+## Tech stack
 
-dotnet ef migrations add InitialCreate
- 
-dotnet ef database update
+- **C#**
+- **.NET 7**
+- **ASP.NET Core**
+- **Entity Framework Core**
+- **SQLite / in-memory database**
+- **Swagger**
+- **xUnit / integration testing**
+
+> This project was originally developed in 2023. It is preserved as a public portfolio project and may be modernized incrementally as part of my continuous architecture and engineering studies.
+
+## Architecture overview
+
+```text
+Client
+  |
+  v
+ASP.NET Core API
+  |
+  +--> Controllers
+  |
+  +--> Repositories
+  |
+  +--> EF Core
+          |
+          +--> award/movie data
 ```
 
-## Configuração
+The solution separates API concerns from data-access logic through repositories and uses automated tests to validate the expected API behavior.
 
-1. Clone o repositório para o seu ambiente local:
-   ```bash
-   git clone https://github.com/WillianZanutoOliveira/ApiWebFilme.git
-   ```
-   
-2. Abra o projeto no Visual Studio ou Visual Studio Code.
+## Running locally
 
-3. Certifique-se de que o arquivo CSV está na pasta Assets com o nome do arquivo "movies.csv" esteja presente na raiz do projeto da API, contendo os dados dos filmes.
+### Requirements
 
-4. O banco de dados em memória será utilizado automaticamente pelo projeto, não sendo necessária nenhuma instalação externa.
+- .NET 7 SDK
 
-## Executando o projeto
-
-### Visual Studio
-
-- Clique em "Start" ou pressione F5 para iniciar a aplicação.
-
-### Visual Studio Code
-
-- Abra um terminal na pasta do projeto e execute o seguinte comando:
+Clone the repository:
 
 ```bash
-dotnet run --project ApiWebFilme.csproj
+git clone https://github.com/WillianZanutoOliveira/ApiWebFilme.git
+cd ApiWebFilme
 ```
 
-## Executando o projeto
+Restore and run:
 
-- O projeto tem o swagger implementado da API será executado e estará disponível na URL [https://localhost:7017;http://localhost:5159] ou verifique no cmd qual é a porta que ele está rodando o projeto.
+```bash
+dotnet restore
+dotnet run --project ApiWebFilme/ApiWebFilme.csproj
+```
 
-## Testes de Integração
+When running in development, use Swagger/OpenAPI to explore the available endpoints.
 
-- Os testes de integração são executados para verificar se os endpoints da API estão retornando os resultados corretos.
+## Tests
 
-### Visual Studio
-
-- Abra o Test Explorer (Ctrl+R, A) e clique em "Run All" para executar os testes de integração.
-
-### Visual Studio Code
-
-- Abra um terminal na pasta do projeto de testes e execute o seguinte comando:
+Run the automated tests with:
 
 ```bash
 dotnet test
 ```
 
-- Os resultados dos testes serão exibidos no console.
+The test project validates the API behavior against the expected Golden Raspberry Awards rules.
+
+## Engineering notes
+
+This repository reflects an earlier stage of my .NET work. My current professional focus includes **modern .NET, APIs, integrations, messaging, CI/CD, observability, cloud and software architecture**.
+
+For current architecture case studies and professional positioning, visit my profile:
+- https://github.com/WillianZanutoOliveira
