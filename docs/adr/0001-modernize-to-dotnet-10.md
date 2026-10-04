@@ -1,51 +1,53 @@
-# ADR-0001: Modernize the API to .NET 10
+[🇺🇸 English](0001-modernize-to-dotnet-10.en.md)
 
-- **Status:** Accepted
-- **Date:** 2026-10-03
+# ADR-0001: Modernização da API para .NET 10
 
-## Context
+- **Status:** Aceito
+- **Data:** 2026-10-03
 
-The project was originally implemented with .NET 7. As a public portfolio project, keeping an end-of-life runtime would not accurately represent current .NET engineering practices.
+## Contexto
 
-## Decision
+O projeto foi originalmente implementado com .NET 7. Como projeto público de portfólio, manter um runtime fora de suporte não representaria adequadamente as práticas atuais de engenharia .NET.
 
-Upgrade the API and integration-test projects to **.NET 10** and align the main Microsoft packages with the .NET 10 release line.
+## Decisão
 
-The modernization includes:
+Atualizar os projetos da API e de testes de integração para **.NET 10** e alinhar os principais pacotes Microsoft com a linha de versões do .NET 10.
 
-- `net10.0` target framework;
+A modernização inclui:
+
+- target framework `net10.0`;
 - Entity Framework Core 10;
-- ASP.NET Core testing packages 10;
-- current Swagger tooling;
-- current test SDK and coverage collector;
-- GitHub Actions validation using .NET 10.
+- pacotes de testes ASP.NET Core 10;
+- tooling atual do Swagger;
+- SDK de testes e coletor de cobertura atuais;
+- validação no GitHub Actions usando .NET 10.
 
-## Validation strategy
+## Estratégia de validação
 
-The change was developed on a dedicated branch and submitted through a pull request.
+A alteração foi desenvolvida em uma branch dedicada e submetida por Pull Request.
 
-The PR was merged only after the GitHub Actions pipeline completed successfully.
+O PR só foi integrado depois que o pipeline do GitHub Actions foi concluído com sucesso.
 
-## Consequences
+## Consequências
 
-### Positive
+### Positivas
 
-- supported/current runtime;
-- portfolio reflects modern .NET development;
-- reproducible automated validation;
-- easier future package maintenance.
+- runtime atual e suportado;
+- o portfólio passa a refletir desenvolvimento .NET moderno;
+- validação automatizada reproduzível;
+- manutenção futura de pacotes mais simples.
 
 ### Trade-offs
 
-- the project remains intentionally small and does not introduce architectural complexity only for demonstration purposes;
-- SQLite is retained to preserve low-friction local execution.
+- o projeto permanece intencionalmente pequeno e não adiciona complexidade arquitetural apenas para fins demonstrativos;
+- SQLite é mantido para preservar uma execução local simples.
 
-## Follow-up
+## Próximos passos
 
-Future improvements can focus on:
+Melhorias futuras podem focar em:
 
-- stronger domain/application boundaries;
-- additional negative/edge-case tests;
-- structured error handling;
-- containerized execution;
-- richer observability.
+- limites mais fortes entre domínio e aplicação;
+- testes adicionais para cenários negativos e edge cases;
+- tratamento estruturado de erros;
+- execução containerizada;
+- observabilidade mais rica.
