@@ -1,60 +1,62 @@
-# ADR-0002: Calculate intervals between consecutive producer wins
+[🇺🇸 English](0002-consecutive-award-intervals.en.md)
 
-- **Status:** Accepted
-- **Date:** 2026-10-03
+# ADR-0002: Cálculo dos intervalos entre vitórias consecutivas de produtores
 
-## Context
+- **Status:** Aceito
+- **Data:** 2026-10-03
 
-The award API must identify producers with the minimum and maximum interval between consecutive wins.
+## Contexto
 
-An implementation that compares only the earliest and latest win for a producer is insufficient when that producer has more than two wins.
+A API precisa identificar os produtores com o menor e o maior intervalo entre vitórias consecutivas.
 
-Example:
+Uma implementação que compara apenas a primeira e a última vitória de um produtor é insuficiente quando ele possui mais de duas vitórias.
+
+Exemplo:
 
 ```text
 1990 -> 1991 -> 2000
 ```
 
-The relevant intervals are `1` and `9`, not only `10`.
+Os intervalos relevantes são `1` e `9`, e não apenas `10`.
 
-## Decision
+## Decisão
 
-Extract the rule into a pure `AwardIntervalCalculator`.
+Extrair a regra para um `AwardIntervalCalculator` puro.
 
-The repository is responsible for retrieving winning producer/year data. The calculator is responsible for:
+O repositório é responsável por recuperar os dados de produtor/ano das vitórias. O calculator é responsável por:
 
-- grouping by producer;
-- removing duplicate years;
-- ordering wins;
-- generating adjacent pairs;
-- calculating intervals;
-- finding global minimum and maximum intervals.
+- agrupar por produtor;
+- remover anos duplicados;
+- ordenar as vitórias;
+- gerar pares adjacentes;
+- calcular os intervalos;
+- encontrar os menores e maiores intervalos globais.
 
-## Why separate the calculator
+## Por que separar o calculator
 
-The rule becomes:
+A regra passa a ser:
 
-- independent of EF Core;
-- easier to reason about;
-- directly unit testable;
-- reusable;
-- safer to evolve without HTTP or persistence dependencies.
+- independente do EF Core;
+- mais fácil de compreender;
+- diretamente testável por testes unitários;
+- reutilizável;
+- mais segura para evoluir sem depender de HTTP ou persistência.
 
 ## Edge cases
 
-If no producer has two distinct winning years, the result contains empty `Min` and `Max` collections.
+Se nenhum produtor tiver dois anos distintos de vitória, o resultado contém coleções `Min` e `Max` vazias.
 
-This avoids a runtime failure from calling `Min()` or `Max()` on an empty sequence.
+Isso evita falha em runtime ao chamar `Min()` ou `Max()` sobre uma sequência vazia.
 
-## Consequences
+## Consequências
 
-### Positive
+### Positivas
 
-- more accurate business behavior;
-- lower coupling;
-- clearer responsibility boundaries;
-- stronger automated test coverage.
+- comportamento de negócio mais correto;
+- menor acoplamento;
+- limites de responsabilidade mais claros;
+- cobertura de testes automatizados mais forte.
 
 ### Trade-off
 
-- one additional application service/type is introduced in a small project, but the separation is justified by the business rule.
+- um tipo/serviço adicional de aplicação é introduzido em um projeto pequeno, mas a separação é justificada pela regra de negócio.

@@ -17,7 +17,7 @@
 
 Modernized portfolio API built with **C# and ASP.NET Core** to analyze Golden Raspberry Awards data, with isolated business rules, automated tests, Docker and documented architectural decisions.
 
-**Quick links:** [Architecture](docs/architecture.md) · [ADRs](docs/adr) · [CI](https://github.com/WillianZanutoOliveira/ApiWebFilme/actions/workflows/ci.yml)
+**Quick links:** [Architecture](docs/architecture.en.md) · [ADRs](docs/adr) · [CI](https://github.com/WillianZanutoOliveira/ApiWebFilme/actions/workflows/ci.yml)
 
 The API identifies:
 
@@ -57,10 +57,10 @@ This repository is one of my public .NET portfolio projects and demonstrates API
 
 ## Engineering documentation
 
-- [Architecture](docs/architecture.md)
-- [ADR-0001 — Modernize to .NET 10](docs/adr/0001-modernize-to-dotnet-10.md)
-- [ADR-0002 — Calculate consecutive award intervals](docs/adr/0002-consecutive-award-intervals.md)
-- [ADR-0003 — Startup data seeding and read-only GET](docs/adr/0003-startup-data-seeding.md)
+- [Architecture](docs/architecture.en.md)
+- [ADR-0001 — Modernize to .NET 10](docs/adr/0001-modernize-to-dotnet-10.en.md)
+- [ADR-0002 — Calculate consecutive award intervals](docs/adr/0002-consecutive-award-intervals.en.md)
+- [ADR-0003 — Startup data seeding and read-only GET](docs/adr/0003-startup-data-seeding.en.md)
 
 ## Architecture overview
 
